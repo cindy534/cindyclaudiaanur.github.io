@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Interaktif Kotak Warna - Versi Keren</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet" />
+  <style>
+    /* Animasi background gradient bergerak */
+    @keyframes gradientShift {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background: linear-gradient(270deg, #b8cc47, #0e213b, #1b2743, #2f1717);
+      background-size: 800% 800%;
+      animation: gradientShift 10s ease infinite;
+      font-family: 'Poppins', Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #333;
+      user-select: none;
+    }
+    #container {
+      background: rgba(255,255,255,0.95);
+      padding: 40px 36px 36px 36px;
+      border-radius: 32px;
+      box-shadow:
+        0 12px 24px rgba(52, 152, 219, 0.25),
+        inset 0 0 60px rgba(255, 255, 255, 0.6);
+      text-align: center;
+      margin-top: 40px;
+      max-width: 320px;
+      position: relative;
+      overflow: hidden;
+      border: 3px solid #3498db;
+      background-image: repeating-radial-gradient(circle at center, #f0f7ff 0, #f0f7ff 4px, transparent 5px, transparent 8px);
+    }
+    #colorBox {
+      width: 220px;
+      height: 220px;
+      background-color: #3498db;
+      margin: 0 auto 22px auto;
+      border-radius: 24px;
+      box-shadow:
+        0 6px 20px rgba(52,152,219,0.3),
+        inset 0 0 15px rgba(255,255,255,0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 28px;
+      color: white;
+      cursor: pointer;
+      transition:
+        background-color 0.6s ease,
+        box-shadow 0.3s ease,
+        transform 0.2s ease;
+      font-weight: 800;
+      letter-spacing: 2px;
+      outline: none;
+      position: relative;
+      user-select: none;
+    }
+    #colorBox:hover {
+      box-shadow:
+        0 10px 30px rgba(52,152,219,0.5),
+        inset 0 0 25px rgba(255,255,255,0.7);
+      opacity: 0.95;
+    }
+    #colorBox:active {
+      transform: scale(0.92) rotate(-3deg);
+      box-shadow:
+        0 4px 12px rgba(52,152,219,0.6),
+        inset 0 0 30px rgba(255,255,255,0.8);
+    }
+    /* Tooltip */
+    #colorBox[title]:hover::after {
+      content: attr(title);
+      position: absolute;
+      bottom: 110%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(52, 152, 219, 0.9);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 14px;
+      font-size: 14px;
+      white-space: nowrap;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      opacity: 1;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 10;
+    }
+    /* Icon klik muncul sesaat */
+    .click-icon {
+      position: absolute;
+      font-size: 36px;
+      color: #fff;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      pointer-events: none;
+      opacity: 0.8;
+      animation: popUp 0.6s forwards;
+      user-select: none;
+      text-shadow: 0 0 6px rgba(0,0,0,0.3);
+    }
+    @keyframes popUp {
+      0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0.8;
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.3);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1.6);
+        opacity: 0;
+      }
+    }
+    #clickCount {
+      color: #2980b9;
+      font-weight: 700;
+      font-size: 24px;
+      letter-spacing: 1.2px;
+      margin-top: 0;
+      margin-bottom: 0;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+    #resetBtn {
+      margin-top: 28px;
+      padding: 12px 34px;
+      font-size: 18px;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(90deg, #030f17 60%, #6dd5fa 100%);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow:
+        0 4px 12px rgba(41, 128, 185, 0.4),
+        0 0 12px #6dd5fa;
+      transition: background 0.4s ease, transform 0.15s ease, box-shadow 0.4s ease;
+      user-select: none;
+    }
+    #resetBtn:hover {
+      background: linear-gradient(90deg, #6dd5fa 60%, #2980b9 100%);
+      transform: scale(1.1);
+      box-shadow:
+        0 6px 18px rgba(41, 128, 185, 0.6),
+        0 0 20px #6dd5fa;
+    }
+    /* Animasi teks di kotak */
+    .text-fade {
+      animation: fadeText 0.3s ease forwards;
+    }
+    @keyframes fadeText {
+      0% {
+        opacity: 0;
+        transform: translateY(15%);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @media (max-width: 600px) {
+      #colorBox {
+        width: 160px;
+        height: 160px;
+        font-size: 22px;
+      }
+      #container {
+        padding: 28px 12px 24px 12px;
+        max-width: 280px;
+      }
+      #resetBtn {
+        padding: 10px 24px;
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="colorBox" tabindex="0" title="Klik untuk ganti warna!">Klik saya!</div>
+    <p>Jumlah klik: <span id="clickCount">0</span></p>
+    <button id="resetBtn" aria-label="Reset penghitung klik">Reset</button>
+  </div>
+  <script>
+    const colorBox = document.getElementById('colorBox');
+    const clickCountDisplay = document.getElementById('clickCount');
+    const resetBtn = document.getElementById('resetBtn');
+
+
+    let clickCount = 0;
+
+
+    function getRandomColor() {
+      const letters = '0123456789ABCDEF';
+      let color = '#';
+      for(let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+
+
+    // Fungsi untuk menampilkan animasi icon klik
+    function showClickIcon() {
+      const icon = document.createElement('div');
+      icon.classList.add('click-icon');
+      icon.textContent = '👍';
+      colorBox.appendChild(icon);
+      setTimeout(() => {
+        icon.remove();
+      }, 600);
+    }
+
+
+    // Update tampilan teks dengan animasi
+    function updateBox() {
+      if(clickCount % 5 === 0 && clickCount !== 0) {
+        colorBox.textContent = `Wow! Sudah ${clickCount} klik!`;
+      } else {
+        colorBox.textContent = 'Klik saya!';
+      }
+      // Tambahkan kelas animasi fade
+      colorBox.classList.remove('text-fade');
+      void colorBox.offsetWidth; // trigger reflow untuk restart animasi
+      colorBox.classList.add('text-fade');
+
+
+      clickCountDisplay.textContent = clickCount;
+    }
+
+
+    colorBox.addEventListener('click', () => {
+      const newColor = getRandomColor();
+      colorBox.style.backgroundColor = newColor;
+      clickCount++;
+      updateBox();
+      showClickIcon();
+    });
+
+
+    resetBtn.addEventListener('click', () => {
+      clickCount = 0;
+      colorBox.style.backgroundColor = '#3498db';
+      updateBox();
+    });
+
+
+    colorBox.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        colorBox.click();
+      }
+    });
+  </script>
+</body>
+</html>
